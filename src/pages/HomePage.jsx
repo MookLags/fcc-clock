@@ -1,7 +1,10 @@
 import { useEffect } from 'react';
+import LengthControl from '../components/LengthControl';
 
 const HomePage = () => {
+
   const bgColor = "#465e85";
+
   useEffect(() => {
     document.body.style.backgroundColor = bgColor;
     document.body.style.margin = "0px";
@@ -13,7 +16,8 @@ const HomePage = () => {
 
   return (
   <div>
-    HomePage 
+    <LengthControl ofType="break" />
+    <LengthControl ofType="session" />
   </div>
   )
 }
