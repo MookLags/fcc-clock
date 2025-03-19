@@ -1,0 +1,16 @@
+Lots of user stories here. The first ton are just making sure
+I have the correct identifiers on the divs.
+
+Create a component for the length controll and make sure to have two props for _ label and _ length (break or session) to serve as IDs for the divs/ps/whatever.
+The up and down arrows too need IDs of #break/session-decrement and #break/session-increment. Maybe have prop of type and give these buttons an ID of #{type}-increment and #{type}-decrement to do it more dynamically. 
+
+Create a component for the timer with a #timer-label, #time-left
+
+Create a component for timer control with a #start-stop button and a #reset button.
+
+states to keep track of whether it's a break or a session,
+whether session is in progress to disable the buttons
+
+when either timer hits zero, it needs to, depending on the state, reset to the time XX:00 as provided by break length or session length
+
+
