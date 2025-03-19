@@ -16,8 +16,8 @@ const HomePage = () => {
 
   return (
   <div>
-    <LengthControl ofType="break" />
-    <LengthControl ofType="session" />
+    <LengthControl ofType="break" initialValue="5" />
+    <LengthControl ofType="session" initialValue="25" />
   </div>
   )
 }
