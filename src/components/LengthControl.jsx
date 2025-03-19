@@ -1,6 +1,6 @@
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 
-const LengthControl = ({ ofType, initialValue }) => {
+const LengthControl = ({ ofType, initialValue, onButtonClick }) => {
 
   const toCapitalLetter = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -10,13 +10,12 @@ const LengthControl = ({ ofType, initialValue }) => {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+    textAlign: "center",
+    color: "white",
+    fontFamily: "sans-serif",
     height: "120px",
     width: "250px",
     fontSize: "30px",
-    color: "white",
-    border: "6px solid #2b255c",
-    borderRadius: "15px",
-    fontFamily: "sans-serif"
   }
 
   const buttonDivStyle = {
@@ -45,11 +44,11 @@ const LengthControl = ({ ofType, initialValue }) => {
         </div>
       <div style={buttonDivStyle}>
         <button id={`${ofType}-decrement`}>
-          <FaArrowUp />      
+          <FaArrowDown />
         </button>
         <p id={`${ofType}-length`}>{initialValue}</p>
-        <button id={`${ofType}-decrement`}>
-          <FaArrowDown />
+        <button id={`${ofType}-increment`}>
+          <FaArrowUp />      
         </button>
       </div>
     </div>
