@@ -9,7 +9,7 @@ const HomePage = () => {
   const countdownRef = useRef(null);
   const [session, setSession] = useState(true);
   const [sessionTime, setSessionTime] = useState(0.1);
-  const [breakTime, setBreakTime] = useState(5);
+  const [breakTime, setBreakTime] = useState(0.1);
   const [isPaused, setIsPaused] = useState(true);
   const [displayTime, setDisplayTime] = useState(sessionTime);
   const [startTime, setStartTime] = useState(0);
@@ -36,6 +36,11 @@ const HomePage = () => {
   const bgColor = "#465e85";
 
   useEffect(() => {
+    setDisplayTime(Date.now() + (session ? sessionTime : breakTime) * 60000);
+    countdownRef.current.getApi().start();
+  }, [session, sessionTime, breakTime]);
+
+  useEffect(() => {
     document.body.style.backgroundColor = bgColor;
     document.body.style.margin = "0px";
     return () => {
@@ -44,13 +49,9 @@ const HomePage = () => {
     }
   }, [])
 
-  useEffect(() => {
-    setDisplayTime(Date.now() + (session ? sessionTime : breakTime) * 60000)
-  }, [session, sessionTime, breakTime]);
-
   const renderer = ({minutes, seconds, completed}) => {
     if (completed) {
-      return <span>00:00</span>;
+      return <span>00:00</span>
     } else {
       return <span>{minutes.toString().padStart(2, "0")}:{seconds.toString().padStart(2, "0")}</span>
     }
@@ -78,13 +79,24 @@ const HomePage = () => {
   const startStop = () => {
     if (isPaused) {
       countdownRef.current.getApi().start();
+      setIsPaused(false)
     } else {
       const remainingTime = displayTime - Date.now();
       setDisplayTime(Date.now() + remainingTime);
       countdownRef.current.getApi().pause();
-      console.log(remainingTime);
+      setIsPaused(true)
     }
-    setIsPaused(prev => !prev);
+  }
+
+  const handleCompletion = () => {
+    setTimeout(() => {
+      setSession(prev => !prev);
+    }, 1000)
+
+    setTimeout(() => {
+      setDisplayTime(Date.now() + (session ? sessionTime : breakTime) * 60000);
+      countdownRef.current.getApi().start();
+    }, 1100);
   }
 
   return (
@@ -95,7 +107,7 @@ const HomePage = () => {
       renderer={renderer}
       ref={countdownRef}
       autoStart={false}
-      onComplete={() => setSession(prev => !prev)}
+      onComplete={handleCompletion}
       />
     } />
     <div id="length-control-div" style={lengthControlStyle}>
