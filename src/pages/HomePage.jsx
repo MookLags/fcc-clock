@@ -37,7 +37,6 @@ const HomePage = () => {
 
   useEffect(() => {
     setDisplayTime(Date.now() + (session ? sessionTime : breakTime) * 60000);
-    countdownRef.current.getApi().start();
   }, [session, sessionTime, breakTime]);
 
   useEffect(() => {
@@ -88,6 +87,16 @@ const HomePage = () => {
     }
   }
 
+  const handleReset = () => {
+    if (!isPaused) return;
+    setSession(true);
+    setIsPaused(true);
+    setSessionTime(25);
+    setBreakTime(5);
+    setStartTime(0);
+    setDisplayTime(Date.now() + (session ? sessionTime : breakTime) * 60000);
+  }
+
   const handleCompletion = () => {
     setTimeout(() => {
       setSession(prev => !prev);
@@ -114,7 +123,7 @@ const HomePage = () => {
       <LengthControl ofType="break" handleIncrement={handleBreakIncrement} handleDecrement={handleBreakDecrement} initialValue={breakTime} />
       <LengthControl ofType="session" handleIncrement={handleSessionIncrement} handleDecrement={handleSessionDecrement} initialValue={sessionTime} />
     </div>
-    <TimerControl handleStartStop={startStop} />
+    <TimerControl handleStartStop={startStop} handleReset={handleReset} />
   </div>
   )
 }
