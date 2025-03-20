@@ -11,9 +11,7 @@ const HomePage = () => {
   const [sessionTime, setSessionTime] = useState(25);
   const [breakTime, setBreakTime] = useState(5);
   const [isPaused, setIsPaused] = useState(true);
-
-  let defaultSession = 25;
-  let defaultBreak = 5;
+  const [displayTime, setDisplayTime] = useState(sessionTime);
 
   const pageStyle = {
     display: "flex",
@@ -37,6 +35,11 @@ const HomePage = () => {
   const bgColor = "#465e85";
 
   useEffect(() => {
+    setDisplayTime(session ? sessionTime : breakTime)
+    return () => <></>
+  }, [session, sessionTime, breakTime])
+
+  useEffect(() => {
     document.body.style.backgroundColor = bgColor;
     document.body.style.margin = "0px";
     return () => {
@@ -46,8 +49,7 @@ const HomePage = () => {
   }, [])
 
   const handleCompletion = () => {
-    setTimeout(() => {setSession(prev => !prev);}, 1000);
-    countdownRef.current.getApi().start();
+    setTimeout(() => setSession(prev => !prev), 1000);
   }
 
   const renderer = ({minutes, seconds, completed}) => {
@@ -72,7 +74,6 @@ const HomePage = () => {
     if (!isPaused) return;
     setBreakTime(prev => prev + 1);
   }
-
   const handleBreakDecrement = () => {
     if (!isPaused) return;
     setBreakTime(prev => prev - 1);
@@ -81,19 +82,18 @@ const HomePage = () => {
   const startStop = () => {
     if (isPaused) {
       countdownRef.current.getApi().start();
-      setIsPaused(false);     
     } else {
       countdownRef.current.getApi().pause();
-      setIsPaused(true);
     }
-    console.log(isPaused);
+    setIsPaused(prev => !prev);
   }
 
   return (
   <div style={pageStyle}>
     <MainTitle />
     <Timer ofType={session ? "Session" : "Break"} timeLeft={
-      <Countdown date={session ? (Date.now() + 0.1 * 60000) : (Date.now() + breakTime * 60000)}
+//      <Countdown date={session ? (Date.now() + sessionTime * 60000) : (Date.now() + breakTime * 60000)}
+      <Countdown date={Date.now() + displayTime * 60000}
       renderer={renderer}
       ref={countdownRef}
       autoStart={false}
