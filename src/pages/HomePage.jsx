@@ -47,6 +47,7 @@ const HomePage = () => {
 
   const handleCompletion = () => {
     setTimeout(() => {setSession(prev => !prev);}, 1000);
+    countdownRef.current.getApi().start();
   }
 
   const renderer = ({minutes, seconds, completed}) => {
@@ -58,22 +59,22 @@ const HomePage = () => {
   }
 
   const handleSessionIncrement = () => {
-    if (isPaused) return;
+    if (!isPaused) return;
     setSessionTime(prev => prev + 1);
   }
 
   const handleSessionDecrement = () => {
-    if (isPaused) return;
+    if (!isPaused) return;
     setSessionTime(prev => prev - 1);
   }
 
   const handleBreakIncrement = () => {
-    if (isPaused) return;
+    if (!isPaused) return;
     setBreakTime(prev => prev + 1);
   }
 
   const handleBreakDecrement = () => {
-    if (isPaused) return;
+    if (!isPaused) return;
     setBreakTime(prev => prev - 1);
   }
 
@@ -95,6 +96,7 @@ const HomePage = () => {
       <Countdown date={session ? (Date.now() + 0.1 * 60000) : (Date.now() + breakTime * 60000)}
       renderer={renderer}
       ref={countdownRef}
+      autoStart={false}
       onComplete={handleCompletion}
       />
     } />
