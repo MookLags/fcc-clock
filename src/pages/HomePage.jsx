@@ -8,11 +8,14 @@ import TimerControl from '../components/TimerControl';
 const HomePage = () => {
   const countdownRef = useRef(null);
   const [session, setSession] = useState(true);
-  const [sessionTime, setSessionTime] = useState(0.1);
-  const [breakTime, setBreakTime] = useState(0.1);
+  const [sessionTime, setSessionTime] = useState(25);
+  const [breakTime, setBreakTime] = useState(5);
   const [isPaused, setIsPaused] = useState(true);
   const [displayTime, setDisplayTime] = useState(sessionTime);
   const [startTime, setStartTime] = useState(0);
+
+  const MAXIUMUM_TIME = 60;
+  const MINIMUM_TIME = 1;
 
   const pageStyle = {
     display: "flex",
@@ -57,21 +60,21 @@ const HomePage = () => {
   }
 
   const handleSessionIncrement = () => {
-    if (!isPaused) return;
+    if (!isPaused && sessionTime <= MAXIMUM_TIME) return;
     setSessionTime(prev => prev + 1);
   }
 
   const handleSessionDecrement = () => {
-    if (!isPaused) return;
+    if (!isPaused && sessionTime > MINIMUM_TIME) return;
     setSessionTime(prev => prev - 1);
   }
 
   const handleBreakIncrement = () => {
-    if (!isPaused) return;
+    if (!isPaused && breakTime <= MAXIMUM_TIME) return;
     setBreakTime(prev => prev + 1);
   }
   const handleBreakDecrement = () => {
-    if (!isPaused) return;
+    if (!isPaused && breakTime > MINIMUM_TIME) return;
     setBreakTime(prev => prev - 1);
   }
 
@@ -88,7 +91,6 @@ const HomePage = () => {
   }
 
   const handleReset = () => {
-    if (!isPaused) return;
     setSession(true);
     setIsPaused(true);
     setSessionTime(25);
