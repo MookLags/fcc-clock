@@ -1,7 +1,6 @@
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 
-const LengthControl = ({ ofType, initialValue, onButtonClick }) => {
-
+const LengthControl = ({ ofType, initialValue, handleIncrement, handleDecrement }) => {
   const toCapitalLetter = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
@@ -43,11 +42,15 @@ const LengthControl = ({ ofType, initialValue, onButtonClick }) => {
         <p id={`${ofType}-label`}>{toCapitalLetter(ofType)} Length</p>
         </div>
       <div style={buttonDivStyle}>
-        <button id={`${ofType}-decrement`}>
+        <button id={`${ofType}-decrement`}
+          onClick={handleDecrement}
+        >
           <FaArrowDown />
         </button>
         <p id={`${ofType}-length`}>{initialValue}</p>
-        <button id={`${ofType}-increment`}>
+        <button id={`${ofType}-increment`}
+          onClick={handleIncrement}
+        >
           <FaArrowUp />      
         </button>
       </div>

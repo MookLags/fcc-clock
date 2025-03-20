@@ -8,7 +8,8 @@ import TimerControl from '../components/TimerControl';
 const HomePage = () => {
   const countdownRef = useRef(null);
   const [session, setSession] = useState(true);
-  const [timeLeft, setTimeLeft] = useState(Date.now() + 25 * 60000);
+  const [sessionTime, setSessionTime] = useState(25);
+  const [breakTime, setBreakTime] = useState(5);
   const [isPaused, setIsPaused] = useState(true);
 
   let defaultSession = 25;
@@ -44,36 +45,48 @@ const HomePage = () => {
     }
   }, [])
 
-  useEffect(() => {
-    setTimeLeft(Date.now() + (session ? 0.1 : 5) * 60000);
-  }, [session])
-
   const handleCompletion = () => {
-    setSession(prev => !prev);
+    setTimeout(() => {setSession(prev => !prev);}, 1000);
   }
 
   const renderer = ({minutes, seconds, completed}) => {
     if (completed) {
-      handleCompletion();
-      return <></>;
+      return <span>00:00</span>;
     } else {
       return <span>{minutes.toString().padStart(2, "0")}:{seconds.toString().padStart(2, "0")}</span>
     }
   }
 
+  const handleSessionIncrement = () => {
+    setSessionTime(prev => prev + 1);
+  }
+
+  const handleSessionDecrement = () => {
+    setSessionTime(prev => prev - 1);
+  }
+
+  const handleBreakIncrement = () => {
+    setBreakTime(prev => prev + 1);
+  }
+
+  const handleBreakDecrement = () => {
+    setBreakTime(prev => prev - 1);
+  }
+
+
   return (
   <div style={pageStyle}>
     <MainTitle />
     <Timer ofType={session ? "Session" : "Break"} timeLeft={
-      <Countdown date={timeLeft}
+      <Countdown date={session ? (Date.now() + 0.1 * 60000) : (Date.now() + breakTime * 60000)}
       renderer={renderer}
       ref={countdownRef}
-      onComplete={() => setSession(!session)}
+      onComplete={handleCompletion}
       />
     } />
     <div id="length-control-div" style={lengthControlStyle}>
-      <LengthControl ofType="break" initialValue={defaultBreak} />
-      <LengthControl ofType="session" initialValue={defaultSession} />
+      <LengthControl ofType="break" handleIncrement={handleBreakIncrement} handleDecrement={handleBreakDecrement} initialValue={breakTime} />
+      <LengthControl ofType="session" handleIncrement={handleSessionIncrement} handleDecrement={handleSessionDecrement} initialValue={sessionTime} />
     </div>
     <TimerControl />
   </div>

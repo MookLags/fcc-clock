@@ -2,7 +2,7 @@ import { HiMiniPlayPause } from "react-icons/hi2";
 import { RiResetRightLine } from "react-icons/ri";
 import { useState } from 'react';
 
-const TimerControl = ({ onButtonClick }) => {
+const TimerControl = ({ handleStartStop, handleReset }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const divStyle = {
