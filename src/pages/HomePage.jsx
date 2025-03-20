@@ -8,10 +8,11 @@ import TimerControl from '../components/TimerControl';
 const HomePage = () => {
   const countdownRef = useRef(null);
   const [session, setSession] = useState(true);
-  const [sessionTime, setSessionTime] = useState(25);
+  const [sessionTime, setSessionTime] = useState(0.1);
   const [breakTime, setBreakTime] = useState(5);
   const [isPaused, setIsPaused] = useState(true);
   const [displayTime, setDisplayTime] = useState(sessionTime);
+  const [startTime, setStartTime] = useState(0);
 
   const pageStyle = {
     display: "flex",
@@ -35,11 +36,6 @@ const HomePage = () => {
   const bgColor = "#465e85";
 
   useEffect(() => {
-    setDisplayTime(session ? sessionTime : breakTime)
-    return () => <></>
-  }, [session, sessionTime, breakTime])
-
-  useEffect(() => {
     document.body.style.backgroundColor = bgColor;
     document.body.style.margin = "0px";
     return () => {
@@ -48,9 +44,9 @@ const HomePage = () => {
     }
   }, [])
 
-  const handleCompletion = () => {
-    setTimeout(() => setSession(prev => !prev), 1000);
-  }
+  useEffect(() => {
+    setDisplayTime(Date.now() + (session ? sessionTime : breakTime) * 60000)
+  }, [session, sessionTime, breakTime]);
 
   const renderer = ({minutes, seconds, completed}) => {
     if (completed) {
@@ -83,7 +79,10 @@ const HomePage = () => {
     if (isPaused) {
       countdownRef.current.getApi().start();
     } else {
+      const remainingTime = displayTime - Date.now();
+      setDisplayTime(Date.now() + remainingTime);
       countdownRef.current.getApi().pause();
+      console.log(remainingTime);
     }
     setIsPaused(prev => !prev);
   }
@@ -92,12 +91,11 @@ const HomePage = () => {
   <div style={pageStyle}>
     <MainTitle />
     <Timer ofType={session ? "Session" : "Break"} timeLeft={
-//      <Countdown date={session ? (Date.now() + sessionTime * 60000) : (Date.now() + breakTime * 60000)}
-      <Countdown date={Date.now() + displayTime * 60000}
+      <Countdown date={displayTime}
       renderer={renderer}
       ref={countdownRef}
       autoStart={false}
-      onComplete={handleCompletion}
+      onComplete={() => setSession(prev => !prev)}
       />
     } />
     <div id="length-control-div" style={lengthControlStyle}>
