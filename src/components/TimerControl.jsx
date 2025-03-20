@@ -15,10 +15,12 @@ const TimerControl = ({ handleStartStop, handleReset }) => {
       <HiMiniPlayPause id="start_stop"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleStartStop}
       />
       <RiResetRightLine id="reset" 
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleReset}
       />
     </div>
   )

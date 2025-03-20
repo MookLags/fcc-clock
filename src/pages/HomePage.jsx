@@ -58,21 +58,35 @@ const HomePage = () => {
   }
 
   const handleSessionIncrement = () => {
+    if (isPaused) return;
     setSessionTime(prev => prev + 1);
   }
 
   const handleSessionDecrement = () => {
+    if (isPaused) return;
     setSessionTime(prev => prev - 1);
   }
 
   const handleBreakIncrement = () => {
+    if (isPaused) return;
     setBreakTime(prev => prev + 1);
   }
 
   const handleBreakDecrement = () => {
+    if (isPaused) return;
     setBreakTime(prev => prev - 1);
   }
 
+  const startStop = () => {
+    if (isPaused) {
+      countdownRef.current.getApi().start();
+      setIsPaused(false);     
+    } else {
+      countdownRef.current.getApi().pause();
+      setIsPaused(true);
+    }
+    console.log(isPaused);
+  }
 
   return (
   <div style={pageStyle}>
@@ -88,7 +102,7 @@ const HomePage = () => {
       <LengthControl ofType="break" handleIncrement={handleBreakIncrement} handleDecrement={handleBreakDecrement} initialValue={breakTime} />
       <LengthControl ofType="session" handleIncrement={handleSessionIncrement} handleDecrement={handleSessionDecrement} initialValue={sessionTime} />
     </div>
-    <TimerControl />
+    <TimerControl handleStartStop={startStop} />
   </div>
   )
 }
